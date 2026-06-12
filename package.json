@@ -1,0 +1,23 @@
+{
+  "name": "autouattest",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/arsalannadeemk47-cpu/autouattest.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/arsalannadeemk47-cpu/autouattest/issues"
+  },
+  "homepage": "https://github.com/arsalannadeemk47-cpu/autouattest#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.60.0",
+    "@types/node": "^25.9.1"
+  }
+}
