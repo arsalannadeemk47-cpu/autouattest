@@ -64,16 +64,16 @@
 <header>
   <div class="eyebrow">LA City Permitting · UAT</div>
   <h1>License Validator Report</h1>
-  <div class="run-meta">Generated Jun 15, 2026, 04:53 PM · 1194.9s total runtime</div>
+  <div class="run-meta">Generated Jun 15, 2026, 07:58 PM · 1104.7s total runtime</div>
 </header>
 <div class="summary-bar">
-  <div class="stat-card"><div class="stat-label">Total Tests</div><div class="stat-value white">20</div></div>
-  <div class="stat-card"><div class="stat-label">Passed</div><div class="stat-value green">3</div></div>
-  <div class="stat-card"><div class="stat-label">Failed</div><div class="stat-value red">17</div></div>
+  <div class="stat-card"><div class="stat-label">Total Tests</div><div class="stat-value white">21</div></div>
+  <div class="stat-card"><div class="stat-label">Passed</div><div class="stat-value green">2</div></div>
+  <div class="stat-card"><div class="stat-label">Failed</div><div class="stat-value red">19</div></div>
   <div class="stat-card"><div class="stat-label">Timed Out</div><div class="stat-value gray">0</div></div>
   <div class="progress-card">
-    <div><div class="stat-label">Pass Rate</div><div class="progress-label">15%</div></div>
-    <div class="progress-bar-track"><div class="progress-bar-fill" style="width:15%"></div></div>
+    <div><div class="stat-label">Pass Rate</div><div class="progress-label">10%</div></div>
+    <div class="progress-bar-track"><div class="progress-bar-fill" style="width:10%"></div></div>
   </div>
 </div>
 <div class="table-wrap">
@@ -93,7 +93,7 @@
           <td><span class="pill pill-pass">✓ Passed</span></td>
           <td class="td-permits"><span class="tag tag-expected">Plumbing</span> <span class="tag tag-expected">Pressure Vessel</span></td>
           <td class="td-reason"><span class="muted">—</span></td>
-          <td class="td-dur">53.5s</td>
+          <td class="td-dur">46.6s</td>
           <td class="td-toggle"></td>
         </tr>
         <tr id="detail-0" class="row-detail" style="display:none">
@@ -125,7 +125,7 @@
           <td><span class="pill pill-fail">✗ Failed</span></td>
           <td class="td-permits"><span class="muted">—</span></td>
           <td class="td-reason">TimeoutError: locator.click: Timeout 15000ms exceeded.</td>
-          <td class="td-dur">60.0s</td>
+          <td class="td-dur">52.5s</td>
           <td class="td-toggle"><span class="chevron">▾</span></td>
         </tr>
         <tr id="detail-1" class="row-detail" style="display:none">
@@ -157,7 +157,7 @@
           <td><span class="pill pill-extra">✗ Extra Permits</span></td>
           <td class="td-permits"><span class="tag tag-expected">Pressure Vessel</span></td>
           <td class="td-reason">Unexpected permit types found</td>
-          <td class="td-dur">53.9s</td>
+          <td class="td-dur">46.2s</td>
           <td class="td-toggle"><span class="chevron">▾</span></td>
         </tr>
         <tr id="detail-2" class="row-detail" style="display:none">
@@ -177,7 +177,7 @@
               </div>
               <div class="detail-block">
                 <div class="detail-label">Unexpected</div>
-                <div><span class="tag tag-extra">plumbing</span></div>
+                <div><span class="tag tag-extra">Plumbing</span></div>
               </div>
             </div>
           </td>
@@ -185,11 +185,11 @@
         <tr class="row-main row-fail"
             onclick="toggleDetail('detail-3')" style="cursor:pointer">
           <td class="td-code"><span class="code-badge">C-7</span></td>
-          <td class="td-num">—</td>
-          <td><span class="pill pill-fail">✗ Failed</span></td>
-          <td class="td-permits"><span class="muted">—</span></td>
-          <td class="td-reason">TimeoutError: locator.waitFor: Timeout 30000ms exceeded.</td>
-          <td class="td-dur">72.8s</td>
+          <td class="td-num">1000061</td>
+          <td><span class="pill pill-extra">✗ Extra Permits</span></td>
+          <td class="td-permits"><span class="tag tag-expected">Electrical</span></td>
+          <td class="td-reason">Unexpected permit types found</td>
+          <td class="td-dur">46.9s</td>
           <td class="td-toggle"><span class="chevron">▾</span></td>
         </tr>
         <tr id="detail-3" class="row-detail" style="display:none">
@@ -197,11 +197,11 @@
             <div class="detail-grid">
               <div class="detail-block">
                 <div class="detail-label">Expected Permits</div>
-                <div><span class="muted">—</span></div>
+                <div><span class="tag tag-expected">Electrical</span></div>
               </div>
               <div class="detail-block">
                 <div class="detail-label">Found on Page</div>
-                <div><span class="muted">—</span></div>
+                <div><span class="tag tag-ok">HVAC</span> <span class="tag tag-ok">Fire Sprinkler General</span> <span class="tag tag-ok">Electrical</span></div>
               </div>
               <div class="detail-block">
                 <div class="detail-label">Missing</div>
@@ -209,19 +209,19 @@
               </div>
               <div class="detail-block">
                 <div class="detail-label">Unexpected</div>
-                <div><span class="muted">None</span></div>
+                <div><span class="tag tag-extra">HVAC</span> <span class="tag tag-extra">Fire Sprinkler General</span></div>
               </div>
             </div>
           </td>
         </tr>
         <tr class="row-main row-fail"
             onclick="toggleDetail('detail-4')" style="cursor:pointer">
-          <td class="td-code"><span class="code-badge">C9</span></td>
+          <td class="td-code"><span class="code-badge">C-9</span></td>
           <td class="td-num">—</td>
           <td><span class="pill pill-fail">✗ Failed</span></td>
           <td class="td-permits"><span class="muted">—</span></td>
           <td class="td-reason">TimeoutError: locator.click: Timeout 15000ms exceeded.</td>
-          <td class="td-dur">56.7s</td>
+          <td class="td-dur">53.4s</td>
           <td class="td-toggle"><span class="chevron">▾</span></td>
         </tr>
         <tr id="detail-4" class="row-detail" style="display:none">
@@ -253,7 +253,7 @@
           <td><span class="pill pill-extra">✗ Extra Permits</span></td>
           <td class="td-permits"><span class="tag tag-expected">Electrical</span> <span class="tag tag-expected">EV charger</span> <span class="tag tag-expected">Pressure Vessel</span></td>
           <td class="td-reason">Unexpected permit types found</td>
-          <td class="td-dur">53.2s</td>
+          <td class="td-dur">45.7s</td>
           <td class="td-toggle"><span class="chevron">▾</span></td>
         </tr>
         <tr id="detail-5" class="row-detail" style="display:none">
@@ -273,20 +273,20 @@
               </div>
               <div class="detail-block">
                 <div class="detail-label">Unexpected</div>
-                <div><span class="tag tag-extra">hvac</span> <span class="tag tag-extra">fire sprinkler general</span></div>
+                <div><span class="tag tag-extra">HVAC</span> <span class="tag tag-extra">Fire Sprinkler General</span></div>
               </div>
             </div>
           </td>
         </tr>
-        <tr class="row-main row-pass"
+        <tr class="row-main row-fail"
             onclick="toggleDetail('detail-6')" style="cursor:pointer">
           <td class="td-code"><span class="code-badge">C11</span></td>
           <td class="td-num">808879</td>
-          <td><span class="pill pill-pass">✓ Passed</span></td>
+          <td><span class="pill pill-fail">✗ Missing + Extra</span></td>
           <td class="td-permits"><span class="tag tag-expected">Elevator</span> <span class="tag tag-expected">Pressure Vessel</span></td>
-          <td class="td-reason"><span class="muted">—</span></td>
-          <td class="td-dur">53.3s</td>
-          <td class="td-toggle"></td>
+          <td class="td-reason">Missing and unexpected permit types found</td>
+          <td class="td-dur">46.8s</td>
+          <td class="td-toggle"><span class="chevron">▾</span></td>
         </tr>
         <tr id="detail-6" class="row-detail" style="display:none">
           <td colspan="7">
@@ -301,11 +301,11 @@
               </div>
               <div class="detail-block">
                 <div class="detail-label">Missing</div>
-                <div><span class="muted">None</span></div>
+                <div><span class="tag tag-missing">Elevator</span></div>
               </div>
               <div class="detail-block">
                 <div class="detail-label">Unexpected</div>
-                <div><span class="muted">None</span></div>
+                <div><span class="tag tag-extra">Elevator (repair)</span></div>
               </div>
             </div>
           </td>
@@ -314,10 +314,10 @@
             onclick="toggleDetail('detail-7')" style="cursor:pointer">
           <td class="td-code"><span class="code-badge">C16</span></td>
           <td class="td-num">1042659</td>
-          <td><span class="pill pill-extra">✗ Extra Permits</span></td>
+          <td><span class="pill pill-fail">✗ Missing + Extra</span></td>
           <td class="td-permits"><span class="tag tag-expected">Fire Sprinkler</span> <span class="tag tag-expected">Pressure Vessel</span></td>
-          <td class="td-reason">Unexpected permit types found</td>
-          <td class="td-dur">54.0s</td>
+          <td class="td-reason">Missing and unexpected permit types found</td>
+          <td class="td-dur">45.4s</td>
           <td class="td-toggle"><span class="chevron">▾</span></td>
         </tr>
         <tr id="detail-7" class="row-detail" style="display:none">
@@ -333,11 +333,11 @@
               </div>
               <div class="detail-block">
                 <div class="detail-label">Missing</div>
-                <div><span class="muted">None</span></div>
+                <div><span class="tag tag-missing">Fire Sprinkler</span></div>
               </div>
               <div class="detail-block">
                 <div class="detail-label">Unexpected</div>
-                <div><span class="tag tag-extra">plumbing</span> <span class="tag tag-extra">welding/special equip</span> <span class="tag tag-extra">fire/life safety</span></div>
+                <div><span class="tag tag-extra">Plumbing</span> <span class="tag tag-extra">Fire Sprinkler General</span> <span class="tag tag-extra">Welding/Special Equip</span> <span class="tag tag-extra">Fire/Life Safety</span></div>
               </div>
             </div>
           </td>
@@ -349,7 +349,7 @@
           <td><span class="pill pill-pass">✓ Passed</span></td>
           <td class="td-permits"><span class="tag tag-expected">Electrical</span> <span class="tag tag-expected">HVAC</span> <span class="tag tag-expected">Pressure Vessel</span></td>
           <td class="td-reason"><span class="muted">—</span></td>
-          <td class="td-dur">53.1s</td>
+          <td class="td-dur">45.9s</td>
           <td class="td-toggle"></td>
         </tr>
         <tr id="detail-8" class="row-detail" style="display:none">
@@ -381,7 +381,7 @@
           <td><span class="pill pill-fail">✗ Failed</span></td>
           <td class="td-permits"><span class="muted">—</span></td>
           <td class="td-reason">TimeoutError: locator.click: Timeout 15000ms exceeded.</td>
-          <td class="td-dur">58.1s</td>
+          <td class="td-dur">51.8s</td>
           <td class="td-toggle"><span class="chevron">▾</span></td>
         </tr>
         <tr id="detail-9" class="row-detail" style="display:none">
@@ -413,7 +413,7 @@
           <td><span class="pill pill-fail">✗ Failed</span></td>
           <td class="td-permits"><span class="muted">—</span></td>
           <td class="td-reason">TimeoutError: page.waitForSelector: Timeout 15000ms exceeded.</td>
-          <td class="td-dur">65.6s</td>
+          <td class="td-dur">59.6s</td>
           <td class="td-toggle"><span class="chevron">▾</span></td>
         </tr>
         <tr id="detail-10" class="row-detail" style="display:none">
@@ -445,7 +445,7 @@
           <td><span class="pill pill-fail">✗ Failed</span></td>
           <td class="td-permits"><span class="muted">—</span></td>
           <td class="td-reason">TimeoutError: locator.click: Timeout 15000ms exceeded.</td>
-          <td class="td-dur">57.3s</td>
+          <td class="td-dur">52.0s</td>
           <td class="td-toggle"><span class="chevron">▾</span></td>
         </tr>
         <tr id="detail-11" class="row-detail" style="display:none">
@@ -477,7 +477,7 @@
           <td><span class="pill pill-extra">✗ Extra Permits</span></td>
           <td class="td-permits"><span class="tag tag-expected">Pressure Vessel</span></td>
           <td class="td-reason">Unexpected permit types found</td>
-          <td class="td-dur">51.9s</td>
+          <td class="td-dur">46.7s</td>
           <td class="td-toggle"><span class="chevron">▾</span></td>
         </tr>
         <tr id="detail-12" class="row-detail" style="display:none">
@@ -497,7 +497,7 @@
               </div>
               <div class="detail-block">
                 <div class="detail-label">Unexpected</div>
-                <div><span class="tag tag-extra">plumbing</span></div>
+                <div><span class="tag tag-extra">Plumbing</span></div>
               </div>
             </div>
           </td>
@@ -509,7 +509,7 @@
           <td><span class="pill pill-fail">✗ Failed</span></td>
           <td class="td-permits"><span class="muted">—</span></td>
           <td class="td-reason">TimeoutError: locator.click: Timeout 15000ms exceeded.</td>
-          <td class="td-dur">54.0s</td>
+          <td class="td-dur">50.7s</td>
           <td class="td-toggle"><span class="chevron">▾</span></td>
         </tr>
         <tr id="detail-13" class="row-detail" style="display:none">
@@ -541,7 +541,7 @@
           <td><span class="pill pill-fail">✗ Failed</span></td>
           <td class="td-permits"><span class="muted">—</span></td>
           <td class="td-reason">TimeoutError: page.waitForSelector: Timeout 15000ms exceeded.</td>
-          <td class="td-dur">67.7s</td>
+          <td class="td-dur">59.1s</td>
           <td class="td-toggle"><span class="chevron">▾</span></td>
         </tr>
         <tr id="detail-14" class="row-detail" style="display:none">
@@ -573,7 +573,7 @@
           <td><span class="pill pill-extra">✗ Extra Permits</span></td>
           <td class="td-permits"><span class="tag tag-expected">Pressure Vessel</span></td>
           <td class="td-reason">Unexpected permit types found</td>
-          <td class="td-dur">52.2s</td>
+          <td class="td-dur">47.4s</td>
           <td class="td-toggle"><span class="chevron">▾</span></td>
         </tr>
         <tr id="detail-15" class="row-detail" style="display:none">
@@ -593,7 +593,7 @@
               </div>
               <div class="detail-block">
                 <div class="detail-label">Unexpected</div>
-                <div><span class="tag tag-extra">plumbing</span></div>
+                <div><span class="tag tag-extra">Plumbing</span></div>
               </div>
             </div>
           </td>
@@ -605,7 +605,7 @@
           <td><span class="pill pill-fail">✗ Failed</span></td>
           <td class="td-permits"><span class="muted">—</span></td>
           <td class="td-reason">TimeoutError: locator.waitFor: Timeout 30000ms exceeded.</td>
-          <td class="td-dur">74.0s</td>
+          <td class="td-dur">69.6s</td>
           <td class="td-toggle"><span class="chevron">▾</span></td>
         </tr>
         <tr id="detail-16" class="row-detail" style="display:none">
@@ -632,12 +632,12 @@
         </tr>
         <tr class="row-main row-fail"
             onclick="toggleDetail('detail-17')" style="cursor:pointer">
-          <td class="td-code"><span class="code-badge">D34</span></td>
+          <td class="td-code"><span class="code-badge">D21</span></td>
           <td class="td-num">—</td>
           <td><span class="pill pill-fail">✗ Failed</span></td>
           <td class="td-permits"><span class="muted">—</span></td>
-          <td class="td-reason">TimeoutError: locator.waitFor: Timeout 30000ms exceeded.</td>
-          <td class="td-dur">74.2s</td>
+          <td class="td-reason">TimeoutError: locator.click: Timeout 15000ms exceeded.</td>
+          <td class="td-dur">50.0s</td>
           <td class="td-toggle"><span class="chevron">▾</span></td>
         </tr>
         <tr id="detail-17" class="row-detail" style="display:none">
@@ -664,12 +664,12 @@
         </tr>
         <tr class="row-main row-fail"
             onclick="toggleDetail('detail-18')" style="cursor:pointer">
-          <td class="td-code"><span class="code-badge">D35</span></td>
+          <td class="td-code"><span class="code-badge">D34</span></td>
           <td class="td-num">—</td>
           <td><span class="pill pill-fail">✗ Failed</span></td>
           <td class="td-permits"><span class="muted">—</span></td>
-          <td class="td-reason">TimeoutError: locator.click: Timeout 15000ms exceeded.</td>
-          <td class="td-dur">54.8s</td>
+          <td class="td-reason">TimeoutError: locator.waitFor: Timeout 30000ms exceeded.</td>
+          <td class="td-dur">70.0s</td>
           <td class="td-toggle"><span class="chevron">▾</span></td>
         </tr>
         <tr id="detail-18" class="row-detail" style="display:none">
@@ -696,15 +696,47 @@
         </tr>
         <tr class="row-main row-fail"
             onclick="toggleDetail('detail-19')" style="cursor:pointer">
-          <td class="td-code"><span class="code-badge">D57</span></td>
+          <td class="td-code"><span class="code-badge">D35</span></td>
           <td class="td-num">—</td>
           <td><span class="pill pill-fail">✗ Failed</span></td>
           <td class="td-permits"><span class="muted">—</span></td>
           <td class="td-reason">TimeoutError: locator.click: Timeout 15000ms exceeded.</td>
-          <td class="td-dur">57.8s</td>
+          <td class="td-dur">50.7s</td>
           <td class="td-toggle"><span class="chevron">▾</span></td>
         </tr>
         <tr id="detail-19" class="row-detail" style="display:none">
+          <td colspan="7">
+            <div class="detail-grid">
+              <div class="detail-block">
+                <div class="detail-label">Expected Permits</div>
+                <div><span class="muted">—</span></div>
+              </div>
+              <div class="detail-block">
+                <div class="detail-label">Found on Page</div>
+                <div><span class="muted">—</span></div>
+              </div>
+              <div class="detail-block">
+                <div class="detail-label">Missing</div>
+                <div><span class="muted">None</span></div>
+              </div>
+              <div class="detail-block">
+                <div class="detail-label">Unexpected</div>
+                <div><span class="muted">None</span></div>
+              </div>
+            </div>
+          </td>
+        </tr>
+        <tr class="row-main row-fail"
+            onclick="toggleDetail('detail-20')" style="cursor:pointer">
+          <td class="td-code"><span class="code-badge">D40</span></td>
+          <td class="td-num">—</td>
+          <td><span class="pill pill-fail">✗ Failed</span></td>
+          <td class="td-permits"><span class="muted">—</span></td>
+          <td class="td-reason">TimeoutError: locator.click: Timeout 15000ms exceeded.</td>
+          <td class="td-dur">50.1s</td>
+          <td class="td-toggle"><span class="chevron">▾</span></td>
+        </tr>
+        <tr id="detail-20" class="row-detail" style="display:none">
           <td colspan="7">
             <div class="detail-grid">
               <div class="detail-block">
