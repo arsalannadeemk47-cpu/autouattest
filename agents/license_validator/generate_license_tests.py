@@ -9,7 +9,7 @@ from license_data import TESTABLE_LICENSES
 load_dotenv()
 
 TARGET_URL = "https://lacps--uat.sandbox.my.site.com/s/"
-SEARCH_ADDRESS = "3761"
+SEARCH_ADDRESS = "3761 S D"
 SELECT_ADDRESS = "3761 S Dunn Dr"
 
 
@@ -48,14 +48,14 @@ def generate_license_tests(log_path: str):
     {agent_findings}
 
     Saved context:
-    {json.dumps(context, indent=2)}
+    {{json.dumps(context, indent=2)}}
 
     HTML snapshots:
-    - Homepage: {str(html_snapshots.get('homepage', ''))[:1000]}
-    - New permit page: {str(html_snapshots.get('new_permit_page', ''))[:2000]}
-    - Applicant details: {str(html_snapshots.get('applicant_details_page', ''))[:5000]}
-    - After CSLB load: {str(html_snapshots.get('after_cslb_load', ''))[:3000]}
-    - Application template page: {str(html_snapshots.get('application_template_page', ''))[:5000]}
+    - Homepage: {{str(html_snapshots.get('homepage', ''))[:1000]}}
+    - New permit page: {{str(html_snapshots.get('new_permit_page', ''))[:2000]}}
+    - Applicant details: {{str(html_snapshots.get('applicant_details_page', ''))[:5000]}}
+    - After CSLB load: {{str(html_snapshots.get('after_cslb_load', ''))[:3000]}}
+    - Application template page: {{str(html_snapshots.get('application_template_page', ''))[:5000]}}
 
 
     CONFIRMED WORKING SELECTORS for this site:
@@ -81,7 +81,7 @@ def generate_license_tests(log_path: str):
         // fill() does not fire keyboard events so the dropdown will not appear
         await page.locator('input[placeholder="Search Addresses..."]').click();
         await page.waitForTimeout(500);
-        await page.locator('input[placeholder="Search Addresses..."]').pressSequentially('3761 S D', { delay: 100 });
+        await page.locator('input[placeholder="Search Addresses..."]').pressSequentially('3761 S D', {{ delay: 100 }});
         await page.waitForTimeout(3000);
 
         // Select from Salesforce listbox dropdown
@@ -106,13 +106,13 @@ def generate_license_tests(log_path: str):
     // License number is a combobox dropdown, NOT a text input — click to open then select
         await page.locator('button[aria-label="Existing License Number"]').click();
         await page.waitForTimeout(1000);
-        await page.locator(`lightning-base-combobox-item[data-value="${licenseNumber}"]`).click();
+        await page.locator(`lightning-base-combobox-item[data-value="${{licenseNumber}}"]`).click();
         await page.waitForTimeout(1500);
 
         // License type is ALSO a combobox dropdown, NOT a select element
         await page.locator('button[aria-label="Existing License Type"]').click();
         await page.waitForTimeout(1000);
-        await page.locator(`lightning-base-combobox-item[data-value="${licenseCode}"]`).click();
+        await page.locator(`lightning-base-combobox-item[data-value="${{licenseCode}}"]`).click();
         await page.waitForTimeout(1500);
         
         await page.getByRole('button', {{ name: /load from cslb/i }}).click();

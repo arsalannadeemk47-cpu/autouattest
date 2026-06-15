@@ -51,3 +51,4 @@ if __name__ == "__main__":
     import sys
     force = len(sys.argv) > 1 and sys.argv[1] == "explore"
     asyncio.run(run_permit_pipeline(force_explore=force))
+

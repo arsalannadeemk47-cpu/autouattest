@@ -2,206 +2,204 @@ import { test, expect, Page } from '@playwright/test';
 
 test.use({ storageState: 'tests/setup/.auth/user.json' });
 
-interface LicenseTestData {
-  code: string;
-  number: string;
-  expectedPermits: string[];
-}
-
-const licenseTestData: LicenseTestData[] = [
-  { code: 'A', number: '1045907', expectedPermits: ['Plumbing', 'Pressure Vessel'] },
-  { code: 'B', number: '1092820', expectedPermits: ['Bldg-Alter/Repair', 'Electrical', 'EV Charger', 'HVAC', 'Plumbing', 'Pressure Vessel'] },
-  { code: 'C-4', number: '1044490', expectedPermits: ['Pressure Vessel'] },
-  { code: 'C-7', number: '1002480', expectedPermits: ['Electrical'] },
-  { code: 'C9', number: '1057929', expectedPermits: ['Bldg-Alter/Repair'] },
-  { code: 'C10', number: '1045907', expectedPermits: ['Electrical', 'EV charger', 'Pressure Vessel'] },
-  { code: 'C11', number: '808879', expectedPermits: ['Elevator', 'Pressure Vessel'] },
-  { code: 'C16', number: '1042659', expectedPermits: ['Fire Sprinkler', 'Pressure Vessel'] },
-  { code: 'C20', number: '1000169', expectedPermits: ['Electrical', 'HVAC', 'Pressure Vessel'] },
-  { code: 'C34', number: '1001177', expectedPermits: ['Pressure Vessel'] },
-  { code: 'C36', number: '1000098', expectedPermits: ['Plumbing', 'Pressure Vessel'] },
-  { code: 'C38', number: '999993', expectedPermits: ['Electrical', 'Pressure Vessel'] },
-  { code: 'C42', number: '1006709', expectedPermits: ['Pressure Vessel'] },
-  { code: 'C43', number: '1071509', expectedPermits: ['HVAC'] },
-  { code: 'C46', number: '1003132', expectedPermits: ['Plumbing'] },
-  { code: 'C55', number: '1015870', expectedPermits: ['Pressure Vessel'] },
-  { code: 'C61', number: '957084', expectedPermits: ['Pressure Vessel'] },
-  { code: 'D34', number: '1101973', expectedPermits: ['Pressure Vessel'] },
-  { code: 'D35', number: '1001661', expectedPermits: ['Pressure Vessel'] },
-  { code: 'D57', number: '248449', expectedPermits: ['Pressure Vessel'] },
+// Source of truth: license_code_permit_validations.xlsx
+// C35 and C39 excluded — no license number available
+const LICENSE_TEST_DATA = [
+  { license: '1045907', code: 'A',   expectedPermits: ['Plumbing', 'Pressure Vessel'] },
+  { license: '1092820', code: 'B',   expectedPermits: ['Bldg-Alter/Repair', 'Electrical', 'EV Charger', 'HVAC', 'Plumbing', 'Pressure Vessel'] },
+  { license: '1044490', code: 'C-4', expectedPermits: ['Pressure Vessel'] },
+  { license: '1000061', code: 'C-7', expectedPermits: ['Electrical'] },
+  { license: '1057929', code: 'C-9',  expectedPermits: ['Bldg-Alter/Repair'] },
+  { license: '1045907', code: 'C10', expectedPermits: ['Electrical', 'EV charger', 'Pressure Vessel'] },
+  { license: '808879',  code: 'C11', expectedPermits: ['Elevator', 'Pressure Vessel'] },
+  { license: '1042659', code: 'C16', expectedPermits: ['Fire Sprinkler', 'Pressure Vessel'] },
+  { license: '1000169', code: 'C20', expectedPermits: ['Electrical', 'HVAC', 'Pressure Vessel'] },
+  { license: '1001177', code: 'C34', expectedPermits: ['Pressure Vessel'] },
+  { license: '1000098', code: 'C36', expectedPermits: ['Plumbing', 'Pressure Vessel'] },
+  { license: '999993',  code: 'C38', expectedPermits: ['Electrical', 'Pressure Vessel'] },
+  { license: '1006709', code: 'C42', expectedPermits: ['Pressure Vessel'] },
+  { license: '1071509', code: 'C43', expectedPermits: ['HVAC'] },
+  { license: '1000366', code: 'C46', expectedPermits: ['Plumbing'] },
+  { license: '1015870', code: 'C55', expectedPermits: ['Pressure Vessel'] },
+  { license: '957084',  code: 'C61', expectedPermits: ['Pressure Vessel'] },
+  { license: '1084182', code: 'D21', expectedPermits: ['Pressure Vessel'] },
+  { license: '1000868', code: 'D34', expectedPermits: ['Pressure Vessel'] },
+  { license: '1001661', code: 'D35', expectedPermits: ['Pressure Vessel'] },
+  { license: '943773',  code: 'D40', expectedPermits: ['Pressure Vessel'] }
 ];
 
-/**
- * Navigate to the Applicant Details page through the permit application flow
- */
-async function navigateToApplicantDetailsPage(page: Page): Promise<void> {
-  // Navigate to home
+// ─── Navigation helper ────────────────────────────────────────────────────────
+
+async function navigateToApplicantDetails(page: Page): Promise<void> {
+  // Step 1: Homepage
   await page.goto('https://lacps--uat.sandbox.my.site.com/s/');
   await page.waitForLoadState('domcontentloaded', { timeout: 30000 });
-  await page.waitForTimeout(3000);
+  await page.waitForTimeout(2000);
 
-  // Click Permits menu
+  // Step 2: Open Permits menu
   await page.getByRole('button', { name: /permits/i }).click();
-  await page.waitForTimeout(3000);
+  await page.waitForTimeout(1500);
 
-  // Click New Permit Application
+  // Step 3: New Permit Application
   await page.getByRole('link', { name: 'New Permit Application' }).click();
   await page.waitForLoadState('domcontentloaded', { timeout: 30000 });
   await page.waitForTimeout(3000);
 
-  // Click Start New Application
+  // Step 4: Start New Application
   await page.getByRole('button', { name: 'Start New Application' }).click();
-  await page.waitForLoadState('domcontentloaded', { timeout: 30000 });
   await page.waitForTimeout(3000);
 
-  // Select Pre-Defined Scope
-  // Click the label since it sits on top of the radio input in Salesforce visual picker
+  // Step 5: Select Pre-Defined Scope
+  // Salesforce visual picker — MUST click the label, not the input
   await page.locator('label[for*="Pre-Defined"][for*="Scope"]').click();
   await page.waitForTimeout(3000);
 
-// Select Address radio — use evaluate to bypass label pointer interception
+  // Step 6: Select Address radio
+  // Standard radio — use evaluate() to bypass label pointer interception
   await page.locator('input[value="choiceAddress"]').evaluate(
     (el: HTMLInputElement) => el.click()
   );
   await page.waitForTimeout(2000);
 
-// Click the field first to focus it
-  await page.locator('input[placeholder="Search Addresses..."]').click();
+  // Step 7: Type address to trigger Salesforce autocomplete
+  // MUST use pressSequentially — fill() does not fire keyboard events
+  const addressInput = page.locator('input[placeholder="Search Addresses..."]');
+  await addressInput.click();
   await page.waitForTimeout(500);
-  
-  // Type character by character to trigger Salesforce autocomplete events
-  await page.locator('input[placeholder="Search Addresses..."]').pressSequentially('3761 S D', { delay: 100 });
-  
-  // Wait for the autocomplete dropdown to populate
+  await addressInput.pressSequentially('3761 S Du', { delay: 100 });
   await page.waitForTimeout(3000);
 
-// Click the address from the autocomplete listbox
-  await page.locator('[role="listbox"] [role="option"]')
+  // Step 8: Select address from autocomplete listbox
+  // Scope to the address combobox dropdown specifically to avoid
+  // matching the site search listbox in the header
+  await page.waitForSelector(
+    'input[placeholder="Search Addresses..."] ~ * [role="option"], ' +
+    '#dropdown-element-356 [role="option"], ' +
+    'lightning-base-combobox [role="option"]',
+    { timeout: 15000 }
+  );
+  await page.locator('lightning-base-combobox [role="option"]')
     .filter({ hasText: '3761 S Dunn Dr' })
     .first()
     .click();
-  await page.waitForTimeout(2000);
 
-  // Click Next (first time)
+
+  // Step 9: Next (past address screen)
   await page.getByRole('button', { name: 'Next' }).last().click();
-  await page.waitForLoadState('domcontentloaded', { timeout: 30000 });
   await page.waitForTimeout(3000);
 
-  // Click Next (second time)
+  // Step 10: Next (past second screen — arrives at Applicant Details)
   await page.getByRole('button', { name: 'Next' }).last().click();
   await page.waitForLoadState('domcontentloaded', { timeout: 30000 });
   await page.waitForTimeout(3000);
 }
 
+// ─── Template options helper ──────────────────────────────────────────────────
+
 async function getTemplateOptions(page: Page): Promise<string[]> {
-  // Wait for the Application Template fieldset to be present
+  // Wait for the Application Template fieldset to render
   await page.waitForSelector(
     'fieldset:has(legend:has-text("Application Template"))',
     { timeout: 15000 }
   );
   await page.waitForTimeout(1000);
 
-  // Target the label text nested inside the Application Template radio group
-  const templateLabels = await page.locator(
-    'fieldset:has(legend:has-text("Application Template")) .slds-form-element__label lightning-formatted-rich-text span[part="formatted-rich-text"]'
+  // Drill into the exact label spans inside the radio group
+  // Confirmed selector from live HTML inspection
+  const labels = await page.locator(
+    'fieldset:has(legend:has-text("Application Template")) ' +
+    '.slds-form-element__label lightning-formatted-rich-text ' +
+    'span[part="formatted-rich-text"]'
   ).allTextContents();
 
-  return templateLabels
+  return labels
     .map(t => t.trim())
     .filter(t => t.length > 0 && t.toLowerCase() !== 'application template');
 }
 
-// Create a test for each license code
-for (const testData of licenseTestData) {
-  test(`License ${testData.code} - should show correct permit types`, async ({ page }) => {
-    // Navigate to applicant details page
-    await navigateToApplicantDetailsPage(page);
+// ─── Tests ────────────────────────────────────────────────────────────────────
 
-    // Select "Contractor" from Applicant Role dropdown
-    await page.getByLabel(/applicant role/i).selectOption('Contractor');
-    await page.waitForTimeout(1500);
+test.describe('License Validator Tests', () => {
+  for (const testData of LICENSE_TEST_DATA) {
+    test(`License ${testData.code} - should show correct permit types`, async ({ page }) => {
 
-  // Select Existing License radio — use evaluate to bypass label intercept
-    await page.locator('input[value="ExistingLicense"]').evaluate(
-      (el: HTMLInputElement) => el.click()
-    );
-    await page.waitForTimeout(1500);
+      // Navigate to Applicant Details
+      await navigateToApplicantDetails(page);
 
-  // Open the Existing License Number combobox dropdown
-    await page.locator('button[aria-label="Existing License Number"]').click();
-    await page.waitForTimeout(1000);
+      // Select Applicant Role: Contractor
+      // This field is a native <select> wrapped in lightning-select — selectOption works
+      await page.locator('select[name="Applicant_Role"]').selectOption({ label: 'Contractor' });
+      await page.waitForTimeout(1500);
 
-    // Select the license number from the dropdown by data-value
-    await page.locator(`lightning-base-combobox-item[data-value="${testData.number}"]`).click();
-    await page.waitForTimeout(1500);
-
-// Open the Existing License Type combobox dropdown
-    await page.locator('button[aria-label="Existing License Type"]').click();
-    await page.waitForTimeout(1000);
-
-    // Select the license code from the dropdown by data-value
-    await page.locator(`lightning-base-combobox-item[data-value="${testData.code}"]`).click();
-    await page.waitForTimeout(1500);
-
-    // Click "Load From CSLB"
-    await page.getByRole('button', { name: /load from cslb/i }).click();
-
-    // Wait for "Successfully loaded!" text to appear
-    await page.getByText('Successfully loaded!').waitFor({ timeout: 30000 });
-    await page.waitForTimeout(3000);
-
-    // Click Next
-    await page.getByRole('button', { name: 'Next' }).last().click();
-    await page.waitForLoadState('domcontentloaded', { timeout: 30000 });
-    await page.waitForTimeout(3000);
-
-    // Get all visible permit/template option texts
-    const visiblePermits = await getTemplateOptions(page);
-
-    // Normalize permit names for comparison
-    const normalizePermit = (permit: string): string => {
-      return permit.toLowerCase().trim().replace(/\s+/g, ' ');
-    };
-
-    const expectedPermitsNormalized = testData.expectedPermits.map(normalizePermit);
-    const visiblePermitsNormalized = visiblePermits.map(normalizePermit);
-
-    // Check for missing permits
-    const missingPermits: string[] = [];
-    for (const expected of expectedPermitsNormalized) {
-      const found = visiblePermitsNormalized.some(visible => 
-        visible.includes(expected) || expected.includes(visible)
+      // Select "Existing License On My Account" radio
+      // Standard radio — use evaluate() to bypass label interception
+      await page.locator('input[value="ExistingLicense"]').evaluate(
+        (el: HTMLInputElement) => el.click()
       );
-      if (!found) {
-        missingPermits.push(expected);
-      }
-    }
+      await page.waitForTimeout(1500);
 
-    // Check for unexpected permits
-    const unexpectedPermits: string[] = [];
-    for (const visible of visiblePermitsNormalized) {
-      const found = expectedPermitsNormalized.some(expected =>
-        visible.includes(expected) || expected.includes(visible)
+      // Open Existing License Number combobox and select by data-value
+      await page.locator('button[aria-label="Existing License Number"]').click();
+      await page.waitForTimeout(1000);
+      await page.locator(`lightning-base-combobox-item[data-value="${testData.license}"]`).click();
+      await page.waitForTimeout(1500);
+
+      // Open Existing License Type combobox and select by data-value
+      await page.locator('button[aria-label="Existing License Type"]').click();
+      await page.waitForTimeout(1000);
+      await page.locator(`lightning-base-combobox-item[data-value="${testData.code}"]`).click();
+      await page.waitForTimeout(1500);
+
+      // Click Load From CSLB and wait for success confirmation
+      await page.getByRole('button', { name: /load from cslb/i }).click();
+      await page.getByText('Successfully loaded!').waitFor({ timeout: 30000 });
+      await page.waitForTimeout(1000);
+
+      // Next → Application Template page
+      await page.getByRole('button', { name: 'Next' }).last().click();
+      await page.waitForLoadState('domcontentloaded', { timeout: 30000 });
+      await page.waitForTimeout(3000);
+
+      // Collect visible permit options
+      const visiblePermits = await getTemplateOptions(page);
+
+      // Normalize for case-insensitive comparison
+      const normalize = (s: string) => s.toLowerCase().trim();
+      const normalizedExpected = testData.expectedPermits.map(normalize);
+      const normalizedVisible  = visiblePermits.map(normalize);
+
+      // Determine mismatches
+      const missingPermits = testData.expectedPermits.filter(
+        p => !normalizedVisible.includes(normalize(p))
       );
-      if (!found && visible.length > 3) {
-        unexpectedPermits.push(visible);
+      const unexpectedPermits = visiblePermits.filter(
+        p => !normalizedExpected.includes(normalize(p))
+      );
+
+      // Log in format the reporter's regex can parse
+      console.log(`\n=== License ${testData.code} (${testData.license}) ===`);
+      console.log(`Expected permits: ${testData.expectedPermits.join(', ')}`);
+      console.log(`Visible permits: ${visiblePermits.join(', ')}`);
+      if (missingPermits.length > 0) {
+        console.log(`❌ Missing permits: ${missingPermits.join(', ')}`);
       }
-    }
+      if (unexpectedPermits.length > 0) {
+        console.log(`❌ Unexpected permits: ${unexpectedPermits.join(', ')}`);
+      }
+      if (missingPermits.length === 0 && unexpectedPermits.length === 0) {
+        console.log(`✅ All permits match!`);
+      }
 
-    // Log results
-    console.log(`\n=== License ${testData.code} (${testData.number}) ===`);
-    console.log(`Expected permits: ${testData.expectedPermits.join(', ')}`);
-    console.log(`Visible permits: ${visiblePermits.join(', ')}`);
+      // Assertions
+      expect(
+        missingPermits,
+        `Missing permits for license ${testData.code}: ${missingPermits.join(', ')}`
+      ).toEqual([]);
 
-    if (missingPermits.length > 0) {
-      console.log(`❌ Missing permits: ${missingPermits.join(', ')}`);
-    }
-    if (unexpectedPermits.length > 0) {
-      console.log(`❌ Unexpected permits: ${unexpectedPermits.join(', ')}`);
-    }
-
-    // Assert no missing or unexpected permits
-    expect(missingPermits.length, `Missing permits: ${missingPermits.join(', ')}`).toBe(0);
-    expect(unexpectedPermits.length, `Unexpected permits: ${unexpectedPermits.join(', ')}`).toBe(0);
-  });
-}
+      expect(
+        unexpectedPermits,
+        `Unexpected permits for license ${testData.code}: ${unexpectedPermits.join(', ')}`
+      ).toEqual([]);
+    });
+  }
+});

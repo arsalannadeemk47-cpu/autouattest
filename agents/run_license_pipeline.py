@@ -115,3 +115,18 @@ async def run_license_pipeline(force_explore: bool = False):
 if __name__ == "__main__":
     force = len(sys.argv) > 1 and sys.argv[1] == "explore"
     asyncio.run(run_license_pipeline(force_explore=force))
+
+
+    # Auto-publish report to GitHub Pages
+import shutil
+shutil.copy(
+    '/workspaces/autouattest/license-report/index.html',
+    '/workspaces/autouattest/docs/index.html'
+)
+os.system(
+    'cd /workspaces/autouattest && '
+    'git add docs/index.html && '
+    'git commit -m "Update license validator report $(date +%Y-%m-%d)" && '
+    'git push'
+)
+print("🌐 Report published to GitHub Pages")
