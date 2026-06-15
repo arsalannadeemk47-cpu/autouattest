@@ -3,7 +3,6 @@ import os
 
 # Paste your full cookie string from DevTools here between the quotes
 COOKIE_STRING = os.environ.get("AUTH_COOKIE_STRING", "")
-
 DOMAIN = "lacps--uat.sandbox.my.site.com"
 
 def parse_cookie_string(cookie_string, domain):
