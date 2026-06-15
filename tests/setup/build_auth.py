@@ -1,8 +1,12 @@
 import json
 import os
+from dotenv import load_dotenv
+from pathlib import Path
 
-# Paste your full cookie string from DevTools here between the quotes
-COOKIE_STRING = os.environ.get("AUTH_COOKIE_STRING", "")
+load_dotenv(Path(__file__).parent.parent.parent / '.env')
+
+COOKIE_STRING = os.environ.get("AUTH_COOKIE_STRING", "").strip().strip('"').strip("'")
+
 DOMAIN = "lacps--uat.sandbox.my.site.com"
 
 def parse_cookie_string(cookie_string, domain):
