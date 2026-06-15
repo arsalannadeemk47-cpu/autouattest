@@ -1,11 +1,10 @@
 import asyncio
 import os
 import glob
-from auth.run_auth import run_auth_agent
-from auth.generate_tests import generate_auth_tests
+
 
 def get_latest_log():
-    logs = glob.glob("agents/logs/auth_discovery_*.json")
+    logs = glob.glob("agents/logs/arsalan_discovery_*.json")
     if logs:
         latest = max(logs)
         print(f"♻️  Reusing existing discovery log: {latest}")
@@ -25,18 +24,22 @@ async def run_full_pipeline(force_explore: bool = False):
 
     if not log_path:
         print("\n📍 Stage 1: Autonomous site exploration")
-        log_path = await run_auth_agent()
+        log_path = await run_arsalan_agent()
     else:
         print("\n📍 Stage 1: Skipping exploration — using cached log")
         print("   (run with force_explore=True to re-explore)")
 
     # Stage 2: Generate tests from discovery log
     print("\n📍 Stage 2: Generating tests from discoveries")
-    generate_auth_tests(log_path)
+    generate_arsalan_tests(log_path)
 
     # Stage 3: Run the generated tests
     print("\n📍 Stage 3: Running generated tests")
-    os.system("npx playwright test tests/agents/auth/auth.spec.ts --reporter=list")
+    os.system(
+    "cd /workspaces/autouattest && "
+    "npx playwright test tests/auth.spec.ts "
+    "--reporter=list"
+    )
 
     print("\n" + "=" * 50)
     print("✅ Pipeline complete")
