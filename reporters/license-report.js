@@ -34,6 +34,20 @@ class LicenseReporter {
     const unexpectedPermits = unexpectedMatch ? unexpectedMatch[1].split(',').map(s => s.trim()).filter(Boolean) : [];
     const licenseNumber    = numberMatch    ? numberMatch[1] : '';
 
+    // Read screenshot attachments and encode as base64
+    const screenshots = [];
+    for (const attachment of result.attachments || []) {
+      if (attachment.name === 'screenshot' && attachment.path) {
+        try {
+          const imgBuffer = fs.readFileSync(attachment.path);
+          const base64 = imgBuffer.toString('base64');
+          screenshots.push(`data:image/png;base64,${base64}`);
+        } catch (e) {
+          // Screenshot file missing — skip
+        }
+      }
+    }
+
     let failureReason = '';
     if (result.status === 'timedOut') {
       failureReason = 'Test timed out — could not reach Application Template page';
@@ -61,6 +75,7 @@ class LicenseReporter {
       expectedPermits,
       visiblePermits,
       duration: result.duration,
+      screenshots,
     });
   }
 
@@ -120,8 +135,16 @@ class LicenseReporter {
       const detailId  = `detail-${i}`;
       const showDetail = r.status !== 'passed';
 
+      const screenshotHtml = (r.screenshots && r.screenshots.length > 0)
+        ? r.screenshots.map(src => `
+            <div class="detail-block detail-block-screenshot">
+              <div class="detail-label">Screenshot</div>
+              <img src="${src}" class="screenshot-img" onclick="expandImg(this)" />
+            </div>`).join('')
+        : '';
+
       return `
-        <tr class="row-main ${r.status === 'passed' ? 'row-pass' : 'row-fail'}"
+          <tr class="row-main ${r.status === 'passed' ? 'row-pass' : 'row-fail'}"
             onclick="toggleDetail('${detailId}')" style="cursor:pointer">
           <td class="td-code"><span class="code-badge">${r.licenseCode}</span></td>
           <td class="td-num">${r.licenseNumber || '—'}</td>
@@ -150,6 +173,7 @@ class LicenseReporter {
                 <div class="detail-label">Unexpected</div>
                 <div>${extraList}</div>
               </div>
+              ${screenshotHtml}
             </div>
           </td>
         </tr>`;
@@ -214,7 +238,12 @@ class LicenseReporter {
   .muted { color: var(--muted); font-size: 0.8rem; }
   .td-reason { font-size: 0.78rem; color: var(--muted); max-width: 220px; }
   .td-permits { max-width: 260px; }
-  footer { margin-top: 2rem; text-align: center; font-size: 0.72rem; color: var(--muted); font-family: 'JetBrains Mono', monospace; }
+footer { margin-top: 2rem; text-align: center; font-size: 0.72rem; color: var(--muted); font-family: 'JetBrains Mono', monospace; }
+  .detail-block-screenshot { grid-column: 1 / -1; }
+  .screenshot-img { max-width: 100%; border-radius: 6px; border: 1px solid var(--border); cursor: zoom-in; margin-top: 0.5rem; }
+  .lightbox { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:1000; justify-content:center; align-items:center; }
+  .lightbox.active { display:flex; }
+  .lightbox img { max-width:90vw; max-height:90vh; border-radius:8px; box-shadow:0 0 60px rgba(0,0,0,0.8); }
 </style>
 </head>
 <body>
@@ -246,11 +275,19 @@ class LicenseReporter {
   </table>
 </div>
 <footer>lacps--uat.sandbox.my.site.com · Playwright Test Automation</footer>
+<div id="lightbox" class="lightbox" onclick="this.classList.remove('active')">
+  <img id="lightbox-img" src="" />
+</div>
 <script>
   function toggleDetail(id) {
     const el = document.getElementById(id);
     if (!el) return;
     el.style.display = (el.style.display === 'none' || el.style.display === '') ? 'table-row' : 'none';
+  }
+  function expandImg(img) {
+    event.stopPropagation();
+    document.getElementById('lightbox-img').src = img.src;
+    document.getElementById('lightbox').classList.add('active');
   }
 </script>
 </body>
